@@ -1,0 +1,22 @@
+services:
+  webtop:
+    image: lscr.io/linuxserver/webtop:ubuntu-kde
+    container_name: antigravity-webtop
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      # troque os dois campos abaixo; sem eles o desktop fica aberto na rede
+      - CUSTOM_USER=${WEBTOP_USER:-operador}
+      - PASSWORD=${WEBTOP_PASSWORD:-troque-esta-senha}
+      - SUBFOLDER=/
+    volumes:
+      - ./config:/config
+      - ./workspace:/workspace
+    ports:
+      - "3000:3000"   # http  -> https://localhost:3000
+      - "3001:3001"   # https -> https://localhost:3001 (certificado autoassinado)
+    shm_size: "2gb"
+    restart: unless-stopped
